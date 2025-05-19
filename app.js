@@ -1,18 +1,36 @@
-require('dotenv').config();
+// app.js
 
-var mongoose = require("mongoose");
+const http = require('http');
+const fs = require('fs');
+const url = require('url');
+const groupRoutes = require('./routes/groupRoute');
+const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017/dynamic-chat-app');
+// Conectar ao MongoDB
+mongoose.connect('mongodb://localhost:27017/chat_app', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log("✅ Conectado ao MongoDB!");
+}).catch((err) => {
+  console.error("❌ Erro na conexão com MongoDB:", err);
+});
 
-const app = require('express');
+const PORT = 3000;
 
-const http = require('http').Server(app);
+const server = http.createServer((req, res) => {
+  const parsedUrl = url.parse(req.url, true);
+  const method = req.method;
 
-const userRoute = require('./routes/userRoute');
+  if (parsedUrl.pathname.startsWith('/groups')) {
+    // Delegar para as rotas de grupo
+    return groupRoutes(req, res);
+  }
 
-app.use('/',userRoute);
+  res.writeHead(404, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ error: 'Rota não encontrada' }));
+});
 
-http.listen(3000, function(){
-    console.log('Server is running');
-
+server.listen(PORT, () => {
+  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
 });
