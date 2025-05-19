@@ -59,6 +59,13 @@ const login = async (req, res) => {
         console.log(error.message);
         res.render('login', { message: 'An error occurred. Please try again.' });
     }
+
+    exports.register = (req, res) => {
+  const { nome, email, senha } = req.body;
+
+  res.redirect('/login');
+};
+
 };
 
 module.exports = {
