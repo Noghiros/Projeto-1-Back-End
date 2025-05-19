@@ -1,26 +1,18 @@
-<h1>Register</h1>
+<% layout('layout') %>
 
-<form action="" method="POST" enctype="multipart/form/data"></form>
-
-
-    <input type="text" name="name" placeholder="Enter Name" required>
-    <br><br>
-    <input type="email" name="email" placeholder="Enter Email" required>
-    <br><br>
-    <input type="file" name="image" required>
-    <br><br>
-    <input type="password" name="password" placeholder="Enter Password" required>
-    <br><br>
-    <input type="submit" value="Register" >
-    
+<h2>Cadastro</h2>
+<form action="/register" method="POST">
+  <div class="mb-3">
+    <label for="nome" class="form-label">Nome</label>
+    <input type="text" class="form-control" name="nome" id="nome" required>
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input type="email" class="form-control" name="email" id="email" required>
+  </div>
+  <div class="mb-3">
+    <label for="senha" class="form-label">Senha</label>
+    <input type="password" class="form-control" name="senha" id="senha" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Cadastrar</button>
 </form>
-
-<%
-    if(typeof message !== 'underfined'){
-        %>
-
-            <p syle="color:green; "><%= message %></p>
-        <%
-    }
-
-%>
