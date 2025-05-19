@@ -50,6 +50,11 @@ user_route.get('/dashboard', auth.isLogin,userController.loadDashboard);
 
 user_route.get('*', function(req,res){
     res.redirect('/');
+
+    router.get('/register', (req, res) => {
+  res.render('register', { title: 'Cadastro' });
+});
+
 });
 
 module.exports =  user_route;
