@@ -5,6 +5,7 @@ const fs = require('fs');
 const url = require('url');
 const groupRoutes = require('./routes/groupRoute');
 const mongoose = require('mongoose');
+const errorLogger = require('./middlewares/errorLogger');
 
 // Conectar ao MongoDB
 mongoose.connect('mongodb://localhost:27017/chat_app', {
@@ -34,3 +35,5 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
 });
+
+app.use(errorLogger);
