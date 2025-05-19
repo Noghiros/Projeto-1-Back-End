@@ -1,5 +1,8 @@
 const express =  require('express');
 const user_route = express();
+const router =  express.Router();
+const userController = require('../controllers/userController');
+const validateFields = require('../middlewares/validateFields');
 
 const bodyParser = require('body-parser');
 
@@ -34,6 +37,8 @@ const userController = require('../controllers/userController');
 
 const auth = require('../middlewares/auth');
 
+router.post('/register', validateFields(['nome', 'email', 'senha']), userController.register);
+
 user_route.get('/register', auth.isLogout, userController.registerLoad);
 user_route.post('/register', upload.single('image'),userController.register);
 
@@ -48,3 +53,4 @@ user_route.get('*', function(req,res){
 });
 
 module.exports =  user_route;
+module.exports = router;
