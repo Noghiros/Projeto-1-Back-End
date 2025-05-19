@@ -37,5 +37,5 @@ server.listen(PORT, () => {
 });
 
 app.use(errorLogger);
-app.use(XPathExpression.json());
-app.use(XPathExpression.urlencoded({ extended: true}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
