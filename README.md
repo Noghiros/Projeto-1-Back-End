@@ -1,19 +1,17 @@
 # Projeto 1 — Programação Web Back-End
 
-## Tema: Mensagens Instantâneas (sem uso de Express)
-
-Este projeto simula um sistema simples de grupos de mensagens, com rotas feitas usando apenas Node.js puro e MongoDB.
+## Tema: Mensagens Instantâneas
 
 ---
 
-## ✅ Requisitos
+## Requisitos
 
 - Node.js instalado: https://nodejs.org/
 - MongoDB rodando localmente (ou usar MongoDB Atlas)
 
 ---
 
-## 🚀 Como rodar o projeto
+## Como rodar o projeto
 
 ### 1. Instale as dependências:
 ```bash
@@ -29,7 +27,7 @@ O servidor será iniciado em: `http://localhost:3000`
 
 ---
 
-## 📡 Endpoints disponíveis
+## Endpoints disponíveis
 
 ### Criar grupo
 `POST /groups`
@@ -45,13 +43,6 @@ O servidor será iniciado em: `http://localhost:3000`
 
 ### Deletar grupo
 `DELETE /groups/:id`
-
----
-
-## 🛠️ Tecnologias
-- Node.js
-- MongoDB
-- Mongoose
 
 ---
 
