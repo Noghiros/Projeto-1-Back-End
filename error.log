@@ -1,0 +1,4 @@
+2025-05-19T23:10:47.018Z - MissingSchemaError: Schema hasn't been registered for model "User".
+Use mongoose.model(name, schema)
+2025-05-19T23:18:58.874Z - MissingSchemaError: Schema hasn't been registered for model "User".
+Use mongoose.model(name, schema)

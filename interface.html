@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Grupos de Mensagens</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+    form { margin-bottom: 20px; }
+    input[type="text"] { padding: 8px; width: 250px; }
+    button { padding: 8px 16px; }
+    ul { list-style-type: none; padding: 0; }
+    li { background: #fff; margin: 5px 0; padding: 10px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Gerenciador de Grupos</h1>
+  <form id="groupForm">
+    <input type="text" id="groupName" placeholder="Nome do grupo" required>
+    <button type="submit">Criar Grupo</button>
+  </form>
+
+  <h2>Grupos Criados</h2>
+  <ul id="groupList"></ul>
+
+  <script>
+    const form = document.getElementById('groupForm');
+    const groupList = document.getElementById('groupList');
+
+    // Carregar grupos ao abrir
+    fetchGroups();
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('groupName').value;
+
+      const response = await fetch('http://localhost:3000/groups', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, members: [] })
+      });
+
+      if (response.ok) {
+        form.reset();
+        fetchGroups();
+      } else {
+        alert('Erro ao criar grupo');
+      }
+    });
+
+    async function fetchGroups() {
+      const res = await fetch('http://localhost:3000/groups');
+      const groups = await res.json();
+      groupList.innerHTML = '';
+
+      groups.forEach(group => {
+        const li = document.createElement('li');
+        li.textContent = `${group.name} (ID: ${group._id})`;
+
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'Excluir';
+        delBtn.onclick = async () => {
+          await fetch(`http://localhost:3000/groups/${group._id}`, { method: 'DELETE' });
+          fetchGroups();
+        };
+
+        li.appendChild(delBtn);
+        groupList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
