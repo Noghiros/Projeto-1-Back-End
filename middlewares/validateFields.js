@@ -1,19 +1,23 @@
-function validateFields(requiredFields) {
-    return (req, res, next) => {
-        const missingFields = requiredFields.filter(field => {
-            const value = req.body[field];
-            return value === undefined || value === null || value === '';
-        });
+// middlewares/validateFields.js
 
-        if (missingFields.length > 0) {
-            return res.status(400).json({
+function validateFields(requiredFields, body) {
+    const missingFields = requiredFields.filter(field => {
+        const value = body[field];
+        return value === undefined || value === null || value === '';
+    });
+
+    if (missingFields.length > 0) {
+        return {
+            valid: false,
+            error: {
                 error: 'Campos obrigatórios ausentes',
                 campos: missingFields
-            });
-        }
+            }
+        };
+    }
 
-        next();
-    };
+    return { valid: true };
 }
 
 module.exports = validateFields;
+

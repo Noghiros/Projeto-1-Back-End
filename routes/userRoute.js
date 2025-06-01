@@ -1,61 +1,46 @@
-const express =  require('express');
-const user_route = express();
-const router =  express.Router();
+
+const fs = require('fs');
+const path = require('path');
 const userController = require('../controllers/userController');
-const validateFields = require('../middlewares/validateFields');
-
-const bodyParser = require('body-parser');
-
-const session = require('express-session');
-const { SESSION_SECRET } = process.env;
-user_route.use(session({ secret:SESSION_SECRET}));
-
-user_router.use(bodyParser.json());
-user_route.use(bodyParser.urlencoded({extended:true}));
-
-user_route.set('view engine','ejs');
-user_route.set('views','./views');
-
-user_route.use(express.static('public'));
-
-const path =  require('path');
-const multer = require('multer');
-
-const storage = multer.diskStorage({
-    destination:function(req, file, cb){
-        cb(null, path.join(__dirname,'../public/images'));
-    },
-    filename:function(req, file, cb){
-        const name = Date.now()+'_'+file.originalname;
-                cb(null,name);
-    }
-});
-
-const upload = multer({storage:storage});
-
-const userController = require('../controllers/userController');
-
 const auth = require('../middlewares/auth');
+const formidable = require('formidable');
 
-router.post('/register', validateFields(['nome', 'email', 'senha']), userController.register);
+function userRoutes(req, res) {
+    const { url, method } = req;
 
-user_route.get('/register', auth.isLogout, userController.registerLoad);
-user_route.post('/register', upload.single('image'),userController.register);
+    if (url === '/register' && method === 'GET') {
+        fs.readFile('./views/register.html', 'utf-8', (err, data) => {
+            if (err) {
+                res.writeHead(500);
+                res.end('Erro interno');
+            } else {
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.end(data);
+            }
+        });
+    } else if (url === '/register' && method === 'POST') {
+            const form = new formidable.IncomingForm({
+                uploadDir: path.join(__dirname, '../public/images'),
+                keepExtensions: true,
+                allowEmptyFiles: true, // <-- Adicione esta linha
+                filename: (name, ext, part, form) => {
+                    return Date.now() + '_' + part.originalFilename;
+                }
+            });
 
-user_route.get('/', auth.isLogout, userController.loadLogin);
-user_route.post('/', userController.login);
-user_route.get('/logout', auth.isLogin ,userController.logout);
+        form.parse(req, (err, fields, files) => {
+            if (err) {
+                console.log(err);
+                res.writeHead(500);
+                res.end('Erro no upload');
+            } else {
+                userController.register(req, res, fields, files);
+            }
+        });
+    } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Rota não encontrada' }));
+    }
+}
 
-user_route.get('/dashboard', auth.isLogin,userController.loadDashboard);
-
-user_route.get('*', function(req,res){
-    res.redirect('/');
-
-    router.get('/register', (req, res) => {
-  res.render('register', { title: 'Cadastro' });
-});
-
-});
-
-module.exports =  user_route;
-module.exports = router;
+module.exports = userRoutes;

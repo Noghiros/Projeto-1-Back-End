@@ -6,3 +6,6 @@ Use mongoose.model(name, schema)
 Use mongoose.model(name, schema)
 2025-05-20T01:21:54.531Z - MissingSchemaError: Schema hasn't been registered for model "User".
 Use mongoose.model(name, schema)
+2025-06-01T22:57:32.906Z - ValidationError: members.0: Cast to [ObjectId] failed for value "[ 'idUsuario1', 'idUsuario2' ]" (type string) at path "members.0" because of "CastError"
+2025-06-01T22:57:54.170Z - ValidationError: members.0: Cast to [ObjectId] failed for value "[ 'idUsuario1', 'idUsuario2' ]" (type string) at path "members.0" because of "CastError"
+2025-06-01T23:10:48.197Z - ValidationError: members.0: Cast to [ObjectId] failed for value "[ 'idUsuario1', 'idUsuario2' ]" (type string) at path "members.0" because of "CastError"
