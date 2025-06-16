@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 const path = require('path');
 const userController = require('../controllers/userController');
@@ -37,6 +36,8 @@ function userRoutes(req, res) {
                 userController.register(req, res, fields, files);
             }
         });
+    } else if (url.startsWith('/user/delete/') && method === 'DELETE') {
+        return userController.deleteUser(req, res);
     } else {
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Rota não encontrada' }));

@@ -37,6 +37,11 @@ const register = async (req, res) => {
             return;
         }
 
+        if (!fields.name || !fields.email || !fields.password) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ error: 'Nome, email e senha são obrigatórios.' }));
+        }
+
         try {
             const passwordHash = await bcrypt.hash(fields.password, 10);
             const imagePath = files.image?.newFilename || 'default.png';
@@ -114,9 +119,23 @@ const login = async (req, res) => {
     });
 };
 
+const deleteUser = async (req, res) => {
+    const userId = req.url.split('/').pop();
+    try {
+        await User.findByIdAndDelete(userId);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Usuário excluído com sucesso' }));
+    } catch (error) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Erro ao excluir usuário' }));
+    }
+};
+
 module.exports = {
     registerLoad,
     register,
     loadLogin,
-    login
+    login,
+    deleteUser 
 };
+
